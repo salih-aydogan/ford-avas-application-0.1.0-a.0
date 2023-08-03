@@ -1,0 +1,63 @@
+{
+    "C_Cpp.default.cStandard": "c99",
+    "C_Cpp.default.compilerPath": "${workspaceFolder}/ford-avas-toolchain/10.3.1/bin/arm-none-eabi-gcc.exe",
+    "C_Cpp.default.intelliSenseMode": "gcc-arm",
+    "C_Cpp.default.defines": [
+        "CPU_S32K116", 
+        "START_FROM_FLASH"
+    ],
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/ford-avas-toolchain/10.3.1/lib/gcc/arm-none-eabi/10.3.1/include",
+        "${workspaceFolder}/ford-avas-toolchain/10.3.1/arm-none-eabi/include",
+        "${workspaceFolder}/lib/nxp-sdk/**",
+        "${workspaceFolder}/source/**",
+        "${workspaceFolder}/source/api/**",
+        "${workspaceFolder}/source/app/**",
+        "${workspaceFolder}/source/bsp/**",
+        "${workspaceFolder}/source/driver/**",
+        "${workspaceFolder}/source/util/**",
+        "${workspaceFolder}/source/util/log/**",
+        "${workspaceFolder}/test/unit/test/**",
+        "${workspaceFolder}/test/unit/mocks/**",
+        "${workspaceFolder}/test/unit/vendor/**"
+    ],
+
+    "ceedlingExplorer.projectPath": ".\\test\\unit",
+    "ceedlingExplorer.debugConfiguration": "Ceedling Test Explorer Debug",
+
+    "cortex-debug.armToolchainPath": "${workspaceFolder}/ford-avas-toolchain/10.3.1/bin",
+    "cortex-debug.armToolchainPrefix": "arm-none-eabi",
+    "cortex-debug.JLinkGDBServerPath": "C:/Program Files (x86)/SEGGER/JLink/",
+
+    "editor.rulers": [
+        80,
+        120
+    ],
+
+    "editor.detectIndentation": false,
+    "python.formatting.provider": "autopep8",
+
+    "files.associations": {
+        "*.c": "c",
+        "*.h": "c",
+        "functional": "c",
+        "*.inc": "c",
+        "array": "c",
+        "bitset": "c",
+        "string_view": "c",
+        "rope": "c",
+        "slist": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c",
+        "regex": "c",
+        "utility": "c",
+        "valarray": "c"
+    },
+
+    "git.ignoreLimitWarning": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "cortex-debug.variableUseNaturalFormat": true,
+    "C_Cpp.errorSquiggles": "disabled",
+
+}

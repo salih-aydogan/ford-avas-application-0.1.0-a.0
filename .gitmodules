@@ -1,0 +1,3 @@
+[submodule "ford-avas-toolchain"]
+	path = ford-avas-toolchain
+	url = https://github.com/DaiichiElectronic/ford-avas-toolchain.git

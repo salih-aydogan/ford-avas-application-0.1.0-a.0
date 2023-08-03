@@ -1,0 +1,17 @@
+
+Device S32K116
+
+if SWD 
+speed 4000
+Device S32K116
+con
+f
+r 
+Sleep 50
+loadbin ./build/ford-avas-application.bin , 0x00000000
+verifybin ./build/ford-avas-application.bin , 0x00000000
+Sleep 50
+r
+g
+exit
+

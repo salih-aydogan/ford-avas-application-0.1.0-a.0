@@ -1,0 +1,136 @@
+VPATH=$(SOURCE_DIR)
+
+## Internal variables ##
+OBJECTS=$(C_SOURCES:%.c=%.o)
+OBJECTS+=$(ASMSOURCES:%.$(ASM_EXT)=%.o)
+
+#SOURCE_DIR=$(SOURCEDIR_NAME)/
+SOURCE_DIR+=$(addprefix $(BASEDIR_SDK),$(SOURCE_DIR_SDK))
+
+OBJECT_DIR_PATH=$(BUILD_DIR)/$(OBJECT_DIR)/
+COBJECTS=$(addprefix $(OBJECT_DIR_PATH),$(OBJECTS))
+INCLUDES=$(addprefix -I,$(SOURCE_DIR))
+
+SEPARATOR=======================================================================
+
+## Testing to check whether it is a Windows environment or an Unix like
+## one. This test is based on 'uname' command call. If the shell is a Windows one
+## with no GNU binutils or similar tools, the command will raise a CreateProcess
+## error but the makefile will detect the correct environment and work as expected.
+
+UNAME_CMD:=uname
+OS_DETECTED:=$(shell $(UNAME_CMD))
+
+ifeq ($(OS_DETECTED), )
+	CC_SEARCH:=which $(CC)
+	mkdir=mkdir_windows
+	clean_target=clean_windows
+	env_predetection_msg=Checked environment for '$(UNAME_CMD)', not found
+	env_detected_msg=Assuming Windows environment
+else
+	CC_SEARCH:=which $(CC)
+	mkdir=mkdir_linux
+	clean_target=clean_linux
+	env_predetection_msg=Checked environment, found: $(OS_DETECTED)
+	env_detected_msg=Assuming Unix like environment
+endif
+
+## Testing to check if the toolchain is correct
+CC_DETECTED:=$(shell $(CC_SEARCH))
+
+mkdir_message:=Creating directory for object files
+clean_message:=Removing files and directories
+
+## Targets ##
+.DEFAULT_GOAL := all
+
+check_cc:
+	@echo $(SEPARATOR)
+ifeq ($(CC_DETECTED),)
+	$(error The compiler cannot be found in $(CC) path. Make sure Toolchain is installed)
+else
+	@echo Compiler found in toolchain directory.
+endif
+
+## Targets ##
+
+mkdir_windows:
+	@echo $(SEPARATOR)
+	@echo $(mkdir_message)
+	@mkdir $(OBJECT_DIR_PATH) || @echo Directory already exists
+		
+mkdir_linux:
+	@echo $(SEPARATOR)
+	@echo $(mkdir_message)
+	@mkdir -p $(OBJECT_DIR_PATH)
+
+clean_windows:
+	@echo $(SEPARATOR)
+	@echo $(clean_message)
+	@del /q $(OBJECT_DIR_PATH)\*.* $(ELF_FILE) $(MAP_FILE) $(BIN_FILE) $(HEX_FILE)
+	@rmdir /s /q $(OBJECT_DIR_PATH)
+	
+clean_linux:
+	@echo $(SEPARATOR)
+	@echo $(clean_message)
+	@rm -rf $(ELF_FILE) $(MAP_FILE) $(BIN_FILE) $(HEX_FILE)
+	@rm -rf $(OBJECT_DIR_PATH)
+	
+print_env:
+	@echo $(SEPARATOR)
+	@echo $(env_predetection_msg)
+	@echo $(env_detected_msg)
+
+all: print_env check_cc $(mkdir) $(ELF_FILE) $(BIN_FILE) $(HEX_FILE) build_complete size
+
+# Target used to compile C source files - FLASH target
+$(OBJECT_DIR_PATH)%.o: %.c
+	@echo $(SEPARATOR)
+	@echo Source $<
+	@echo Compiling $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+    
+# Target used to compile assembler files - FLASH target
+$(OBJECT_DIR_PATH)%.o: %.$(ASM_EXT)
+	@echo $(SEPARATOR)
+	@echo Source $<
+	@echo Compiling $@
+	@$(AS) $(ASFLAGS) $(INCLUDES) -c $< -o $@
+
+# Target used to link compiled sources
+
+$(ELF_FILE): $(COBJECTS)
+	@echo $(SEPARATOR)
+	@echo Linking to $(ELF_FILE)
+	@$(LD) -o $(ELF_FILE) $(COBJECTS) $(LDFLAGS)
+
+$(BIN_FILE): $(ELF_FILE)
+	@echo $(SEPARATOR)
+	@echo Creating $(BIN_FILE)
+	$(CP) -O binary -S $(ELF_FILE) $(BIN_FILE)
+
+$(HEX_FILE): $(ELF_FILE)
+	@echo $(SEPARATOR)
+	@echo Creating $(HEX_FILE)
+	$(CP) -O ihex $(ELF_FILE) $(HEX_FILE)
+
+# Target used to create folder used to store temporary objects
+mkdir:
+	@mkdir $(OBJECT_DIR_PATH) || @echo -
+
+# Target used to print executables sizes
+size:
+	@$(CCSIZE) $(ELF_FILE)
+
+# Target used to print compile informations
+print:
+	@echo Compile options: $(CFLAGS) $(ASFLAGS) $(INCLUDES)
+
+build_complete:
+	@echo $(SEPARATOR)
+	@echo Build completed!
+	
+# Target used to remove files and folders
+clean: print_env $(clean_target)
+	
+.PHONY: all size print clean

@@ -1,0 +1,237 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Ceedling test current file(Unit)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\unit && ceedling test:${fileBasename}",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\unit"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Ceedling test all files(Unit)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\unit && ceedling_run.bat",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\unit"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Ceedling clobber(Unit)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\unit && ceedling clobber && ceedling clean",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\unit"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Ceedling test current file(Integration)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\integration && ceedling test:${fileBasename}",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\integration"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Ceedling test all files(Integration)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\integration && ceedling_run.bat",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\integration"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Ceedling clobber(Integration)",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\integration && ceedling clobber && ceedling clean",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\test\\integration"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build All",
+            "type": "shell",
+            "command": "make -f Makefile all",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}"]
+            }
+        },       
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "make -j12 clean",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}"]
+            }
+        },
+        {
+            "label": "Rebuild All",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean",
+                "Build All"
+            ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}"]
+            }
+        },
+        {
+            "label": "Download Flash",
+            "type": "shell",
+            "command": "JLink.exe -CommanderScript downloadfw.jlink",
+            "problemMatcher": []
+        },
+        {
+            "label": "Check DCS Rules",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\tools\\Hamsi\\build && hamsi.exe ..\\..\\..\\${relativeFile}",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "file": 1,
+                        "line": 2,
+                        "message": 3,
+                        "regexp": "(\\w.*) LINE : (\\d+) (.*)"
+                    }
+                ],
+                "fileLocation": ["relative", "${workspaceFolder}"]
+            }
+        },
+        {
+            "label": "QAC trigger",
+            "type": "shell",
+            "command": "${workspaceFolder}\\tools\\QAC_Trigger\\qac_trigger.bat",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "message": 4,
+                        "regexp": "Diag: ([^:]+):(\\d+):(\\d+) (.*)"
+                    }
+                ],
+                "fileLocation": ["relative", "${workspaceFolder}"]
+            }
+        },
+        {   "label": "Unit Test Covarage",
+            "command": "Chrome",
+            "windows": {
+                "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+            },
+            "problemMatcher": ["$tsc"],
+            "args": ["${workspaceFolder}\\test\\unit\\output\\index.html"]
+        },
+        {   "label": "Integration Test Covarage",
+            "command": "Chrome",
+            "windows": {
+                "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+            },
+            "problemMatcher": ["$tsc"],
+            "args": ["${workspaceFolder}\\test\\integration\\output\\index.html"]
+        }
+    ]
+}

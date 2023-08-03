@@ -1,0 +1,140 @@
+---
+
+# Notes:
+# Sample project C code is not presently written to produce a release artifact.
+# As such, release build options are disabled.
+# This sample, therefore, only demonstrates running a collection of integration tests.
+
+:project:
+  :use_exceptions: FALSE
+  :use_test_preprocessor: TRUE
+  :use_auxiliary_dependencies: TRUE
+  :build_root: build
+  # :release_build: TRUE
+  :test_file_prefix: test_
+
+#:release_build:
+#  :output: TempSensor.out
+#  :use_assembly: FALSE
+
+:environment: []
+
+:extension:
+  :executable: .out
+
+:paths:
+  :test:
+    - +:test/**
+    - -:test/support
+    - +:mocks/**
+  :source:
+    - ../../source/**
+    - ../../lib/**
+    
+  :support:
+    - test/support
+
+:defines:
+  :common: &common_defines []
+  :test:
+    - *common_defines
+    - TEST
+    # - CMOCK_MEM_DYNAMIC  # Should be at the end. (Linux not supported.)
+    - CMOCK_MEM_SIZE=65536
+  :test_preprocess:
+    - *common_defines
+    - TEST
+    #- CMOCK_MEM_DYNAMIC  # Should be at the end. (Linux not supported.)
+    - CMOCK_MEM_SIZE=65536
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :enforce_strict_ordering: TRUE
+  :fail_on_unexpected_calls: TRUE
+  :treat_externs: :include
+  :plugins:
+    - :expect
+    - :expect_any_args
+    - :array
+    - :ignore
+    - :ignore_arg
+    - :return_thru_ptr
+    - :callback
+  :treat_as:
+    uint8:    HEX8
+    uint16:   HEX16
+    uint32:   UINT32
+    int8:     INT8
+    bool:     UINT8
+    _Bool:    UINT8 
+    size_t:   UINT32
+
+  :mock_path: "mocks"
+  :includes:
+
+:libraries:
+  :system:
+    - m
+
+:flags: #Wall ile derleyebilmek için sadece ceedling komutu çalıştırılmalı
+  :test:
+    :compile:
+      :*:
+        - -std=c99 -Wall -Wextra -fprofile-arcs -ftest-coverage -m32 -Wno-missing-field-initializers -funsigned-char
+    :link:
+      :*:
+        - --coverage -m32
+
+:tools:
+  :gcov_report:
+    :executable: gcov
+    :arguments:
+      - -a
+      - -b
+      - -c
+      - --human-readable
+      - -n
+      - -k
+      - -p
+      - -f
+      - -w
+      - -o "$": GCOV_BUILD_OUTPUT_PATH
+      - "\"${1}\""
+  :gcov_post_report:
+    :executable: gcovr
+    :optional: FALSE
+    :arguments:
+        - -p
+        - -b
+        - -g
+        - -d
+        - -e '.*build.*|.*test/.*'
+        - --html
+        - --html-details
+        - -r .
+
+:gcov:
+  :compile:
+    :*:
+      - -m32
+  :link:
+    :*:
+      - -m32
+  :utilities:
+    - gcovr                     # Use gcovr to create the specified reports (default).
+    - ReportGenerator           # Use ReportGenerator to create the specified reports.
+  :reports:
+    - HtmlBasic
+    - HtmlDetailed
+    - Badges
+
+:plugins:
+  :load_paths:
+    - vendor/ceedling/plugins
+  :enabled:
+#    - stdout_gtestlike_tests_report
+    - module_generator
+    - gcov
+    - xml_tests_report
+...

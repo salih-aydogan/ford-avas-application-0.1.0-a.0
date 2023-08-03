@@ -1,0 +1,28 @@
+diff --git a/test/unit/vendor/ceedling/vendor/unity/src/unity_internals.h b/test/unit/vendor/ceedling/vendor/unity/src/unity_internals.h
+index 1737ebf..d7c2116 100644
+--- a/test/unit/vendor/ceedling/vendor/unity/src/unity_internals.h
++++ b/test/unit/vendor/ceedling/vendor/unity/src/unity_internals.h
+@@ -612,7 +612,6 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
+                                    const UNITY_FLAGS_T flags);
+ 
+ void UnityFail(const char* message, const UNITY_LINE_TYPE line);
+-void UnityPass(const char* msg, const char* func, const UNITY_LINE_TYPE line);
+ void UnityIgnore(const char* message, const UNITY_LINE_TYPE line);
+ void UnityMessage(const char* message, const UNITY_LINE_TYPE line);
+ 
+@@ -758,14 +757,13 @@ int UnityTestMatches(void);
+  *-------------------------------------------------------*/
+ 
+ #define UNITY_TEST_FAIL(line, message)   UnityFail(   (message), (UNITY_LINE_TYPE)(line))
+-#define UNITY_TEST_PASS(line, message)   UnityPass(   (message), (__func__), (UNITY_LINE_TYPE)(line))
+ #define UNITY_TEST_IGNORE(line, message) UnityIgnore( (message), (UNITY_LINE_TYPE)(line))
+ 
+ /*-------------------------------------------------------
+  * Test Asserts
+  *-------------------------------------------------------*/
+ 
+-#define UNITY_TEST_ASSERT(condition, line, message)                                              do {if (condition) {UNITY_TEST_PASS((UNITY_LINE_TYPE)(line), (#condition));} else {UNITY_TEST_FAIL((UNITY_LINE_TYPE)(line), (message));}} while(0)
++#define UNITY_TEST_ASSERT(condition, line, message)                                              do {if (condition) {} else {UNITY_TEST_FAIL((UNITY_LINE_TYPE)(line), (message));}} while(0)
+ #define UNITY_TEST_ASSERT_NULL(pointer, line, message)                                           UNITY_TEST_ASSERT(((pointer) == NULL),  (UNITY_LINE_TYPE)(line), (message))
+ #define UNITY_TEST_ASSERT_NOT_NULL(pointer, line, message)                                       UNITY_TEST_ASSERT(((pointer) != NULL),  (UNITY_LINE_TYPE)(line), (message))
+ #define UNITY_TEST_ASSERT_EMPTY(pointer, line, message)                                          UNITY_TEST_ASSERT(((pointer[0]) == 0),  (UNITY_LINE_TYPE)(line), (message))

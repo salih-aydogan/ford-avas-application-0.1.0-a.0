@@ -1,0 +1,190 @@
+diff --git a/test/unit/vendor/ceedling/vendor/unity/src/unity.c b/test/unit/vendor/ceedling/vendor/unity/src/unity.c
+index 3692948..ffa5cf0 100644
+--- a/test/unit/vendor/ceedling/vendor/unity/src/unity.c
++++ b/test/unit/vendor/ceedling/vendor/unity/src/unity.c
+@@ -536,13 +536,6 @@ static void UnityTestResultsFailBegin(const UNITY_LINE_TYPE line)
+     UNITY_OUTPUT_CHAR(':');
+ }
+ 
+-void UnityTestResultsPassBegin(const UNITY_LINE_TYPE line)
+-{
+-    UnityTestResultsBegin(Unity.TestFile, line);
+-    UnityPrint(UnityStrPass);
+-    UNITY_OUTPUT_CHAR(':');
+-}
+-
+ /*-----------------------------------------------*/
+ void UnityConcludeTest(void)
+ {
+@@ -728,16 +721,6 @@ void UnityAssertEqualNumber(const UNITY_INT expected,
+         UnityAddMsgIfSpecified(msg);
+         UNITY_FAIL_AND_BAIL;
+     }
+-    else
+-    {
+-        UnityTestResultsPassBegin(lineNumber);
+-        UnityPrint(UnityStrExpected);
+-        UnityPrintNumberByStyle(expected, style);
+-        UnityPrint(UnityStrWas);
+-        UnityPrintNumberByStyle(actual, style);
+-        UnityAddMsgIfSpecified(msg);
+-        UNITY_PRINT_EOL();
+-    }
+ }
+ 
+ /*-----------------------------------------------*/
+@@ -778,16 +761,6 @@ void UnityAssertGreaterOrLessOrEqualNumber(const UNITY_INT threshold,
+         UnityAddMsgIfSpecified(msg);
+         UNITY_FAIL_AND_BAIL;
+     }
+-    else
+-    {
+-        UnityTestResultsPassBegin(lineNumber);
+-        UnityPrint(UnityStrExpected);
+-        UnityPrintNumberByStyle(threshold, style);
+-        UnityPrint(UnityStrWas);
+-        UnityPrintNumberByStyle(actual, style);
+-        UnityAddMsgIfSpecified(msg);
+-        UNITY_PRINT_EOL();
+-    }
+ }
+ 
+ #define UnityPrintPointlessAndBail()       \
+@@ -882,16 +855,6 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
+             UnityAddMsgIfSpecified(msg);
+             UNITY_FAIL_AND_BAIL;
+         }
+-        else
+-        {
+-            UnityTestResultsPassBegin(lineNumber);
+-            UnityPrint(UnityStrExpected);
+-            UnityPrintNumberByStyle(expect_val, style);
+-            UnityPrint(UnityStrWas);
+-            UnityPrintNumberByStyle(actual_val, style);
+-            UnityAddMsgIfSpecified(msg);
+-            UNITY_PRINT_EOL();
+-        }
+         /* Walk through array by incrementing the pointers */
+         if (flags == UNITY_ARRAY_TO_ARRAY)
+         {
+@@ -1255,16 +1218,6 @@ void UnityAssertNumbersWithin(const UNITY_UINT delta,
+         UnityAddMsgIfSpecified(msg);
+         UNITY_FAIL_AND_BAIL;
+     }
+-    else
+-    {
+-        UnityTestResultsPassBegin(lineNumber);
+-        UnityPrint(UnityStrExpected);
+-        UnityPrintNumberByStyle(expected, style);
+-        UnityPrint(UnityStrWas);
+-        UnityPrintNumberByStyle(actual, style);
+-        UnityAddMsgIfSpecified(msg);
+-        UNITY_PRINT_EOL();
+-    }
+ }
+ 
+ /*-----------------------------------------------*/
+@@ -1378,16 +1331,6 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
+             UnityAddMsgIfSpecified(msg);
+             UNITY_FAIL_AND_BAIL;
+         }
+-        else
+-        {
+-            UnityTestResultsPassBegin(lineNumber);
+-            UnityPrint(UnityStrExpected);
+-            UnityPrintNumberByStyle(expect_val, style);
+-            UnityPrint(UnityStrWas);
+-            UnityPrintNumberByStyle(actual_val, style);
+-            UnityAddMsgIfSpecified(msg);
+-            UNITY_PRINT_EOL();
+-        }
+         /* Walk through array by incrementing the pointers */
+         if (flags == UNITY_ARRAY_TO_ARRAY)
+         {
+@@ -1434,13 +1377,6 @@ void UnityAssertEqualString(const char* expected,
+         UnityAddMsgIfSpecified(msg);
+         UNITY_FAIL_AND_BAIL;
+     }
+-    else
+-    {
+-        UnityTestResultsPassBegin(lineNumber);
+-        UnityPrintExpectedAndActualStrings(expected, actual);
+-        UnityAddMsgIfSpecified(msg);
+-        UNITY_PRINT_EOL();
+-    }
+ }
+ 
+ /*-----------------------------------------------*/
+@@ -1481,13 +1417,6 @@ void UnityAssertEqualStringLen(const char* expected,
+         UnityAddMsgIfSpecified(msg);
+         UNITY_FAIL_AND_BAIL;
+     }
+-    else
+-    {
+-        UnityTestResultsPassBegin(lineNumber);
+-        UnityPrintExpectedAndActualStrings(expected, actual);
+-        UnityAddMsgIfSpecified(msg);
+-        UNITY_PRINT_EOL();
+-    }
+ }
+ 
+ /*-----------------------------------------------*/
+@@ -1566,18 +1495,6 @@ void UnityAssertEqualStringArray(UNITY_INTERNAL_PTR expected,
+             UnityAddMsgIfSpecified(msg);
+             UNITY_FAIL_AND_BAIL;
+         }
+-        else
+-        {
+-            UnityTestResultsPassBegin(lineNumber);
+-            if (num_elements > 1)
+-            {
+-                UnityPrint(UnityStrElement);
+-                UnityPrintNumberUnsigned(j);
+-            }
+-            UnityPrintExpectedAndActualStrings(expd, act);
+-            UnityAddMsgIfSpecified(msg);
+-            UNITY_PRINT_EOL();
+-        }
+     } while (++j < num_elements);
+ }
+ 
+@@ -1635,22 +1552,6 @@ void UnityAssertEqualMemory(UNITY_INTERNAL_PTR expected,
+                 UnityAddMsgIfSpecified(msg);
+                 UNITY_FAIL_AND_BAIL;
+             }
+-            else
+-            {
+-                UnityTestResultsPassBegin(lineNumber);
+-                if (num_elements > 1)
+-                {
+-                    UnityPrint(UnityStrElement);
+-                    UnityPrintNumberUnsigned(num_elements - elements - 1);
+-                }
+-                UnityPrint(UnityStrByte);
+-                UnityPrintNumberUnsigned(length - bytes - 1);
+-                UnityPrint(UnityStrExpected);
+-                UnityPrintNumberByStyle(*ptr_exp, UNITY_DISPLAY_STYLE_HEX8);
+-                UnityPrint(UnityStrWas);
+-                UnityPrintNumberByStyle(*ptr_act, UNITY_DISPLAY_STYLE_HEX8);
+-                UNITY_PRINT_EOL();
+-            }
+             ptr_exp++;
+             ptr_act++;
+         }
+@@ -1853,16 +1754,6 @@ void UnityPrintF(const UNITY_LINE_TYPE line, const char* format, ...)
+  *-----------------------------------------------*/
+ 
+ /*-----------------------------------------------*/
+-void UnityPass(const char* msg, const char* func, const UNITY_LINE_TYPE line)
+-{
+-    UnityTestResultsPassBegin(line);
+-    UnityPrint(func);
+-    UNITY_OUTPUT_CHAR(':');
+-    UnityPrint(msg);
+-    UNITY_PRINT_EOL();
+-}
+-
+-/*-----------------------------------------------*/
+ void UnityFail(const char* msg, const UNITY_LINE_TYPE line)
+ {
+     RETURN_IF_FAIL_OR_IGNORE;

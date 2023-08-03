@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Microcontroller",
+            "request": "launch",
+            "type": "cortex-debug",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Build All",
+            "executable": ".\\build\\ford-avas-application.elf",
+            "servertype": "jlink",
+            "serverpath": "JLinkGDBServerCL.exe",
+            "serverArgs": ["-Speed", "100000", "-gui"],
+            "device": "S32K116",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "svdFile": "./lib/nxp-sdk/platform/devices/S32K116/S32K116.svd",
+        },
+        {
+            "name": "Ceedling Test Explorer Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\test\\unit\\build\\test\\out\\${command:ceedlingExplorer.debugTestExecutable}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}\\test\\unit\\",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
+
+
